@@ -12,7 +12,7 @@
 // 9. Gráficos con Chart.js
 // =====================================================
 
-const map = L.map("map", { /*1. CONFIGURACIÓN INICIAL DEL MAPA*/
+const map = L.map("map", {
     zoomControl: true
 }).setView([6.3778, -75.4467], 13);
 
@@ -104,20 +104,20 @@ const coloresGraficos = [
 
 
 /* 4. FUNCIONES QUE SE CONSULTARON PARA QUE SE PUEDAN LEER LOS ATRIBUTOS*/
-function obtenerNombre(properties = {}) {
+function obtenerNombreVereda(properties = {}) {
     return (
-        properties. ||
-        properties. ||
-        properties.nombre_ ||
-        properties.NOMBRE_ ||
+        properties.vereda ||
+        properties.VEREDA ||
+        properties.nombre_vereda ||
+        properties.NOMBRE_VEREDA ||
         properties.Layer ||
         properties.layer ||
         properties.nombre ||
         properties.NOMBRE ||
         properties.nombre_ver ||
-        properties.NOM_ ||
-        properties._nom ||
-        properties. ||
+        properties.NOM_VEREDA ||
+        properties.vereda_nom ||
+        properties.Vereda ||
         "Sin dato"
     );
 }
@@ -167,16 +167,16 @@ function obtenerImage(properties = {}) {
     return (
         properties.image ||
         properties.IMAGE ||
+        properties.imagen ||
+        properties.IMAGEN ||
         properties.foto ||
         properties.FOTO ||
-        properties.image ||
-        properties.IMAGE ||
         ""
     );
 }
 
 function obtenerColorPorRiesgo(riesgo = "") {
-    const valor = riesgo.toLowerCase().trim();
+    const valor = String(riesgo).toLowerCase().trim();
 
     if (valor.includes("avenida")) return "#c542b3";
     if (valor.includes("inund")) return "#4db7ff";
@@ -269,9 +269,9 @@ fetch("puntos_criticos.geojson")
         console.error("Error cargando puntos críticos:", error);
     });
 
-/*7. LLENAR SELECTOR DE S* (corregido varias veces por IA)*/
-function llenarSelectors(data) {
-    const select = document.getElementById("Select");
+/*7. LLENAR SELECTOR DE veredas* (corregido varias veces por IA)*/
+function llenarSelectorVeredas(data) {
+    const select = document.getElementById("veredaSelect");
 
     if (!select) {
         console.warn("No existe el select con id 'veredaSelect'.");
@@ -349,7 +349,8 @@ function llenarSelectorRiesgos(data) {
     console.log("Riesgos cargados:", riesgosOrdenados);
 }
 
-/*9. CREAR CAPA DE PUNTOS (REVISAR TABLA ORIGINAL DE KML)*/ 
+
+/*9. CREAR CAPA DE PUNTOS criticos (REVISAR TABLA ORIGINAL DE KML)*/ 
 function crearCapaPuntos(data) {
     return L.geoJSON(data, {
         pointToLayer: function (feature, latlng) {
@@ -384,10 +385,11 @@ function crearCapaPuntos(data) {
             if (image && image.trim() !== "") {
                 popupHTML += `
                     <br><br>
-                    <img 
-                        src="${image}" 
+                    <img
+                        src="${image}"
                         alt="Imagen del punto crítico"
-                        style="width:100%; max-width:240px; border-radius:8px;"
+                        style="width:100%; max-width:240px; border-radius:8px; display:block; border:1px solid #d9e2d9;"
+                        onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;color:#666;font-size:12px;margin-top:6px;&quot;>No se encontró la imagen asociada.</div>');"
                     >
                 `;
             }
@@ -398,6 +400,7 @@ function crearCapaPuntos(data) {
         }
     });
 }
+
 
 /* 10. FILTRAR DATOS POR VEREDA Y RIESGO (FORMUALDO POR IA-MODIFICADO ALEJA)*/
 function filtrarDatos() {
