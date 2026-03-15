@@ -272,41 +272,60 @@ fetch("puntos_criticos.geojson")
 /*7. LLENAR SELECTOR DE veredas* (corregido varias veces por IA)*/
 function llenarSelectorVeredas(data) {
     const select = document.getElementById("veredaSelect");
-
-    if (!select) {
-        console.warn("No existe el select con id 'veredaSelect'.");
-        return;
-    }
+    if (!select) return;
 
     select.innerHTML = `<option value="">Seleccione vereda</option>`;
 
-    if (!data || !data.features || !Array.isArray(data.features)) {
-        select.innerHTML = `<option value="">No hay veredas disponibles</option>`;
-        return;
-    }
+    if (!data || !Array.isArray(data.features)) return;
 
     const veredasUnicas = new Set();
 
     data.features.forEach(feature => {
         const vereda = obtenerNombreVereda(feature.properties).trim();
-
         if (vereda && vereda !== "Sin dato") {
             veredasUnicas.add(vereda);
         }
     });
 
-    const veredasOrdenadas = Array.from(veredasUnicas).sort((a, b) =>
-        a.localeCompare(b, "es", { sensitivity: "base" })
-    );
+    Array.from(veredasUnicas)
+        .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+        .forEach(vereda => {
+            const option = document.createElement("option");
+            option.value = vereda;
+            option.textContent = vereda;
+            select.appendChild(option);
+        });
 
-    veredasOrdenadas.forEach(vereda => {
-        const option = document.createElement("option");
-        option.value = vereda;
-        option.textContent = vereda;
-        select.appendChild(option);
+    console.log("Veredas cargadas:", Array.from(veredasUnicas));
+}
+
+function llenarSelectorRiesgos(data) {
+    const select = document.getElementById("riesgoSelect");
+    if (!select) return;
+
+    select.innerHTML = `<option value="">Todos los riesgos</option>`;
+
+    if (!data || !Array.isArray(data.features)) return;
+
+    const riesgosUnicos = new Set();
+
+    data.features.forEach(feature => {
+        const riesgo = obtenerRiesgo(feature.properties).trim();
+        if (riesgo && riesgo !== "Sin clasificar") {
+            riesgosUnicos.add(riesgo);
+        }
     });
 
-    console.log("Veredas cargadas:", veredasOrdenadas);
+    Array.from(riesgosUnicos)
+        .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }))
+        .forEach(riesgo => {
+            const option = document.createElement("option");
+            option.value = riesgo;
+            option.textContent = riesgo;
+            select.appendChild(option);
+        });
+
+    console.log("Riesgos cargados:", Array.from(riesgosUnicos));
 }
 
 /* 8. LLENAR SELECTOR DE RIESGOS*/
@@ -404,13 +423,10 @@ function crearCapaPuntos(data) {
 
 /* 10. FILTRAR DATOS POR VEREDA Y RIESGO (FORMUALDO POR IA-MODIFICADO ALEJA)*/
 function filtrarDatos() {
-    const veredaSelect = document.getElementById("veredaSelect");
-    const riesgoSelect = document.getElementById("riesgoSelect");
+    const veredaSeleccionada = document.getElementById("veredaSelect")?.value.trim() || "";
+    const riesgoSeleccionado = document.getElementById("riesgoSelect")?.value.trim() || "";
 
-    const veredaSeleccionada = veredaSelect ? veredaSelect.value.trim() : "";
-    const riesgoSeleccionado = riesgoSelect ? riesgoSelect.value.trim() : "";
-
-    if (!puntosData || !puntosData.features) {
+    if (!puntosData || !Array.isArray(puntosData.features)) {
         alert("No se han cargado los puntos críticos.");
         return;
     }
@@ -434,21 +450,19 @@ function filtrarDatos() {
 
     console.log("Resultado del filtro:", filtrados);
 
-    if (filtrados.features.length === 0) {
-        generarTabla(filtrados);
-        calcularEstadisticas(filtrados);
-        return;
-    }
+    if (filtrados.features.length > 0) {
+        puntosLayer = crearCapaPuntos(filtrados).addTo(map);
 
-    puntosLayer = crearCapaPuntos(filtrados).addTo(map);
-
-    if (puntosLayer.getBounds().isValid()) {
-        map.fitBounds(puntosLayer.getBounds(), { padding: [30, 30] });
+        if (puntosLayer.getBounds().isValid()) {
+            map.fitBounds(puntosLayer.getBounds(), { padding: [30, 30] });
+        }
     }
 
     generarTabla(filtrados);
     calcularEstadisticas(filtrados);
 }
+
+window.filtrarDatos = filtrarDatos;
 
 /* 11. LIMPIAR FILTRO*/
 function limpiarFiltro() {
