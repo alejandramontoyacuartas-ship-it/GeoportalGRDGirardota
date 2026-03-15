@@ -332,10 +332,10 @@ function obtenerImage(properties = {}) {
     return (
         properties.image ||
         properties.IMAGE ||
+        properties.imagen ||
+        properties.IMAGEN ||
         properties.foto ||
         properties.FOTO ||
-        properties.image ||
-        properties.IMAGE ||
         ""
     );
 }
@@ -412,7 +412,7 @@ fetch("veredas.geojson")
 
 
 /* 6. CARGAR PUNTOS CRÍTICOS */
-fetch("puntos_criticos.geojson")
+fetch("puntos_críticos.geojson")
     .then(response => {
         if (!response.ok) {
             throw new Error("No fue posible cargar puntos_criticos.geojson");
@@ -588,16 +588,16 @@ function crearCapaPuntos(data) {
             `;
 
             if (image && image.trim() !== "") {
-                popupHTML += `
-                    <br><br>
-                    <img 
-                        src="${image}" 
-                        alt="Imagen del punto crítico"
-                        style="width:100%; max-width:240px; border-radius:8px; display:block; border:1px solid #d9e2d9;"
-                        onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;color:#666; font-size:12px; margin-top:6px;&quot;>No se encontró la imagen asociada.</div>');"
-                    >
-                `;
-            }
+    popupHTML += `
+        <br><br>
+        <img 
+            src="${image}" 
+            alt="Imagen del punto crítico"
+            style="width:100%; max-width:240px; border-radius:8px; display:block; border:1px solid #d9e2d9;"
+            onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;color:#666; font-size:12px; margin-top:6px;&quot;>No se encontró la imagen asociada.</div>');"
+        >
+    `;
+}
 
             popupHTML += `</div>`;
 
