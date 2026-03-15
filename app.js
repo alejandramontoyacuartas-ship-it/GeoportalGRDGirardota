@@ -352,16 +352,6 @@ function obtenerColorPorRiesgo(riesgo = "") {
     return "#2f7a57";
 }
 
-function obtenerColorPorRiesgo(riesgo = "") {
-    const valor = riesgo.toLowerCase().trim();
-
-    if (valor.includes("avenida")) return "#c542b3";
-    if (valor.includes("inund")) return "#4db7ff";
-    if (valor.includes("estruct")) return "#57b85c";
-    if (valor.includes("socav") || valor.includes("hund")) return "#d9e73f";
-    if (valor.includes("movimiento") || valor.includes("masa")) return "#f04b44";return "#2f7a57";
-}
-
 /* 5. CARGAR CAPA DE VEREDAS */
 fetch("veredas.geojson")
     .then(response => {
