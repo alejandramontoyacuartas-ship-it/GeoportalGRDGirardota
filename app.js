@@ -81,14 +81,14 @@ north.onAdd = function () {
 north.addTo(map);
 
 /* 2. VARIABLES DE LEYENDA Y DE GRAFICOS*/
-let veredasLayer = null;
+let sLayer = null;
 let puntosLayer = null;
 
 let puntosData = null;
-let veredasData = null;
+let sData = null;
 
 let graficoRiesgos = null;
-let graficoVeredas = null;
+let graficos = null;
 
 /* 3. IDENTIFICACION DE COLORES INSTITUCIONALES DE LA ALCALDIA DE GIRARDOTA 2024-2027*/
 const coloresGraficos = [
@@ -104,20 +104,20 @@ const coloresGraficos = [
 
 
 /* 4. FUNCIONES QUE SE CONSULTARON PARA QUE SE PUEDAN LEER LOS ATRIBUTOS*/
-function obtenerNombreVereda(properties = {}) {
+function obtenerNombre(properties = {}) {
     return (
-        properties.vereda ||
-        properties.VEREDA ||
-        properties.nombre_vereda ||
-        properties.NOMBRE_VEREDA ||
+        properties. ||
+        properties. ||
+        properties.nombre_ ||
+        properties.NOMBRE_ ||
         properties.Layer ||
         properties.layer ||
         properties.nombre ||
         properties.NOMBRE ||
         properties.nombre_ver ||
-        properties.NOM_VEREDA ||
-        properties.vereda_nom ||
-        properties.Vereda ||
+        properties.NOM_ ||
+        properties._nom ||
+        properties. ||
         "Sin dato"
     );
 }
@@ -188,18 +188,18 @@ function obtenerColorPorRiesgo(riesgo = "") {
 }
 
 
-/* 5. CARGAR CAPA DE VEREDAS - GEOJSON ARGIS SHP*/
+/* 5. CARGAR CAPA DE S - GEOJSON ARGIS SHP*/
 fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar veredas.geojson"); /*renglon de IA*/
+            throw new Error("No fue posible cargar s.geojson"); /*renglon de IA*/
         }
         return response.json();
     })
     .then(data => {
-        veredasData = data;
+        sData = data;
 
-        veredasLayer = L.geoJSON(data, {
+        sLayer = L.geoJSON(data, {
             style: function () {
                 return {
                     color: "#2f7a57",
@@ -209,21 +209,21 @@ fetch("veredas.geojson")
                 };
             },
             onEachFeature: function (feature, layer) {
-                const nombreVereda = obtenerNombreVereda(feature.properties);
+                const nombre = obtenerNombre(feature.properties);
 
                 layer.bindPopup(`
                     <div>
-                        <b>Vereda:</b> ${nombreVereda}
+                        <b>:</b> ${nombre}
                     </div>
                 `);
 
-                layer.bindTooltip(nombreVereda, {
+                layer.bindTooltip(nombre, {
                     permanent: false,
                     direction: "center",
-                    className: "tooltip-vereda"
+                    className: "tooltip-"
                 });
 
-                /* Resaltar la vereda al pasar el mouse*/
+                /* Resaltar la  al pasar el mouse*/
                 layer.on({
                     mouseover: function (e) {
                         e.target.setStyle({
@@ -233,18 +233,18 @@ fetch("veredas.geojson")
                         });
                     },
                     mouseout: function (e) {
-                        veredasLayer.resetStyle(e.target);
+                        sLayer.resetStyle(e.target);
                     }
                 });
             }
         }).addTo(map);
 
-        if (veredasLayer.getBounds && veredasLayer.getBounds().isValid()) {
-            map.fitBounds(veredasLayer.getBounds(), { padding: [20, 20] });
+        if (sLayer.getBounds && sLayer.getBounds().isValid()) {
+            map.fitBounds(sLayer.getBounds(), { padding: [20, 20] });
         }
     })
     .catch(error => {
-        console.error("Error cargando veredas:", error);
+        console.error("Error cargando s:", error);
     });
 
 
@@ -261,7 +261,7 @@ fetch("puntos_criticos.geojson")
 
         puntosData = data;
 
-        llenarSelectorVeredas(data);
+        llenarSelectors(data);
         llenarSelectorRiesgos(data);
         calcularEstadisticas(data);
         limpiarTabla();
@@ -270,9 +270,9 @@ fetch("puntos_criticos.geojson")
         console.error("Error cargando puntos críticos:", error);
     });
 
-/*7. LLENAR SELECTOR DE VEREDAS* (corregido varias veces por IA)*/
-function llenarSelectorVeredas(data) {
-    const select = document.getElementById("veredaSelect");
+/*7. LLENAR SELECTOR DE S* (corregido varias veces por IA)*/
+function llenarSelectors(data) {
+    const select = document.getElementById("Select");
 
     if (!select) {
         console.warn("No existe el select con id 'veredaSelect'.");
