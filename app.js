@@ -1,7 +1,5 @@
 // =====================================================
 // GEO PORTAL GIRARDOTA - APP.JS
-// Versión final depurada para GitHub
-// Controla:
 // 1. Inicialización del mapa
 // 2. Capas base
 // 3. Carga de veredas
@@ -12,15 +10,13 @@
 // 8. Tarjetas resumen
 // 9. Estadísticas
 // 10. Gráficos con Chart.js
-// =====================================================
+//
 
 const map = L.map("map", {
     zoomControl: true
 }).setView([6.3778, -75.4467], 13);
-
-/* =====================================================
-   1. CAPAS BASE
-===================================================== */
+ 
+/*   1. CAPAS BASE*/
 const capaOSM = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
 });
@@ -62,10 +58,7 @@ L.control.scale({
     imperial: false
 }).addTo(map);
 
-/* =====================================================
-   2. NORTE DEL MAPA
-   Debe existir la imagen norte.png en la ruta indicada.
-===================================================== */
+/*    2. NORTE DEL MAPA (no sale en el Geoportal) */
 const north = L.control({ position: "topright" });
 north.onAdd = function () {
     const div = L.DomUtil.create("div", "north-arrow");
@@ -74,9 +67,7 @@ north.onAdd = function () {
 };
 north.addTo(map);
 
-/* =====================================================
-   3. VARIABLES GLOBALES
-===================================================== */
+/*   3. VARIABLES GLOBALES */
 let veredasLayer = null;
 let puntosLayer = null;
 let puntosData = null;
@@ -95,11 +86,7 @@ const coloresGraficos = [
     "#d7ead8"
 ];
 
-/* =====================================================
-   4. FUNCIONES DE LECTURA DE ATRIBUTOS
-   Esto permite leer datos aunque cambien los nombres
-   de los campos en el GeoJSON.
-===================================================== */
+/*    4. FUNCIONES DE LECTURA DE ATRIBUTOS (permite leer datos aunque cambien los nombres de los campos en el GeoJSON.) */
 function obtenerNombreVereda(properties = {}) {
     return (
         properties.vereda ||
@@ -171,9 +158,7 @@ function obtenerImage(properties = {}) {
     );
 }
 
-/* =====================================================
-   5. COLOR SEGÚN TIPO DE RIESGO
-===================================================== */
+/* 5. COLOR SEGÚN TIPO DE RIESGO */
 function obtenerColorPorRiesgo(riesgo = "") {
     const valor = String(riesgo).toLowerCase().trim();
 
@@ -186,9 +171,7 @@ function obtenerColorPorRiesgo(riesgo = "") {
     return "#2f7a57";
 }
 
-/* =====================================================
-   6. CARGA DE VEREDAS
-===================================================== */
+/* 6. ACTIVACION DE INFORMACION DE LAS VEREDAS  */
 fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
@@ -248,41 +231,37 @@ fetch("veredas.geojson")
         console.error("Error cargando veredas:", error);
     });
 
-/* =====================================================
-   7. CARGA DE PUNTOS CRÍTICOS
-   Aquí queda corregido el problema principal:
-   al cargar el GeoJSON, los puntos se pintan de una vez.
-===================================================== */
+/*  7. CARGA DE PUNTOS CRÍTICOS*/
 fetch("puntos_criticos.geojson")
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("No fue posible cargar puntos_criticos.geojson");
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("GeoJSON de puntos cargado correctamente:", data);
+.then(response => {
+    if (!response.ok) {
+        throw new Error("No fue posible cargar puntos_criticos.geojson");
+    }
 
-        puntosData = data;
+    return response.json();
+})
+.then(data => {
 
-        // Cargar puntos al abrir el geoportal
-        puntosLayer = crearCapaPuntos(data).addTo(map);
+    console.log("GeoJSON de puntos cargado correctamente:", data);
 
-        // Llenar selectores
-        llenarSelectorVeredas(data);
-        llenarSelectorRiesgos(data);
+    puntosData = data;
 
-        // Tabla y estadísticas iniciales
-        generarTabla(data);
-        calcularEstadisticas(data);
-    })
-    .catch(error => {
-        console.error("Error cargando puntos críticos:", error);
-    });
+    // SOLO llenar selectores
+    llenarSelectorVeredas(data);
+    llenarSelectorRiesgos(data);
 
-/* =====================================================
-   8. LLENAR SELECTOR DE VEREDAS
-===================================================== */
+    // estadisticas generales
+    calcularEstadisticas(data);
+
+    // tabla vacía
+    limpiarTabla();
+
+})
+.catch(error => {
+    console.error("Error cargando puntos críticos:", error);
+});
+
+/*    8. LLENAR SELECTOR DE VEREDAS*/
 function llenarSelectorVeredas(data) {
     const select = document.getElementById("veredaSelect");
     if (!select) return;
@@ -312,9 +291,7 @@ function llenarSelectorVeredas(data) {
     console.log("Veredas cargadas:", Array.from(veredasUnicas));
 }
 
-/* =====================================================
-   9. LLENAR SELECTOR DE RIESGOS
-===================================================== */
+/*   9. LLENAR SELECTOR DE RIESGOS */
 function llenarSelectorRiesgos(data) {
     const select = document.getElementById("riesgoSelect");
     if (!select) return;
@@ -344,9 +321,7 @@ function llenarSelectorRiesgos(data) {
     console.log("Riesgos cargados:", Array.from(riesgosUnicos));
 }
 
-/* =====================================================
-   10. CREAR CAPA DE PUNTOS
-===================================================== */
+/* 10. CREAR CAPA DE PUNTOS */
 function crearCapaPuntos(data) {
     return L.geoJSON(data, {
         pointToLayer: function (feature, latlng) {
@@ -397,55 +372,38 @@ function crearCapaPuntos(data) {
     });
 }
 
-/* =====================================================
-   11. FILTRAR DATOS
-===================================================== */
+/*    11. FILTRAR DATOS */
 function filtrarDatos() {
-    const veredaSeleccionada = document.getElementById("veredaSelect")?.value.trim() || "";
-    const riesgoSeleccionado = document.getElementById("riesgoSelect")?.value.trim() || "";
 
-    if (!puntosData || !Array.isArray(puntosData.features)) {
-        alert("No se han cargado los puntos críticos.");
-        return;
-    }
-
-    // Quitar capa anterior para volverla a pintar filtrada
-    if (puntosLayer && map.hasLayer(puntosLayer)) {
-        map.removeLayer(puntosLayer);
-    }
+    const veredaSeleccionada = document.getElementById("veredaSelect").value;
+    const riesgoSeleccionado = document.getElementById("riesgoSelect").value;
 
     const filtrados = {
         type: "FeatureCollection",
         features: puntosData.features.filter(feature => {
-            const veredaDato = obtenerNombreVereda(feature.properties).trim();
-            const riesgoDato = obtenerRiesgo(feature.properties).trim();
 
-            const cumpleVereda = !veredaSeleccionada || veredaDato === veredaSeleccionada;
-            const cumpleRiesgo = !riesgoSeleccionado || riesgoDato === riesgoSeleccionado;
+            const vereda = obtenerNombreVereda(feature.properties);
+            const riesgo = obtenerRiesgo(feature.properties);
 
-            return cumpleVereda && cumpleRiesgo;
+            return (
+                (!veredaSeleccionada || vereda === veredaSeleccionada) &&
+                (!riesgoSeleccionado || riesgo === riesgoSeleccionado)
+            );
         })
     };
 
-    console.log("Resultado del filtro:", filtrados);
-
-    if (filtrados.features.length > 0) {
-        puntosLayer = crearCapaPuntos(filtrados).addTo(map);
-
-        if (puntosLayer.getBounds && puntosLayer.getBounds().isValid()) {
-            map.fitBounds(puntosLayer.getBounds(), { padding: [30, 30] });
-        }
-    } else {
-        puntosLayer = null;
+    if (puntosLayer) {
+        map.removeLayer(puntosLayer);
     }
+
+    puntosLayer = crearCapaPuntos(filtrados).addTo(map);
 
     generarTabla(filtrados);
     calcularEstadisticas(filtrados);
 }
 
-/* =====================================================
-   12. LIMPIAR FILTRO
-===================================================== */
+
+/*  12. LIMPIAR FILTRO*/
 function limpiarFiltro() {
     const veredaSelect = document.getElementById("veredaSelect");
     const riesgoSelect = document.getElementById("riesgoSelect");
@@ -474,10 +432,7 @@ function limpiarFiltro() {
     }
 }
 
-/* =====================================================
-   13. GENERAR TABLA DE RESULTADOS
-   El tbody en HTML debe tener id="tablaResultados"
-===================================================== */
+/*    13. GENERAR TABLA DE RESULTADOS */
 function generarTabla(data) {
     const tbody = document.getElementById("tablaResultados");
 
@@ -548,9 +503,8 @@ function generarTabla(data) {
     });
 }
 
-/* =====================================================
-   14. TABLA VACÍA INICIAL
-===================================================== */
+/* 
+   14. TABLA VACÍA INICIAL */
 function limpiarTabla() {
     const tbody = document.getElementById("tablaResultados");
 
