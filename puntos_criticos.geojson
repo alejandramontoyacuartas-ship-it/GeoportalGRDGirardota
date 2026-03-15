@@ -17,7 +17,7 @@
                 "vereda": "San Esteban",
                 "sector": "Yamaha",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID1.jpg"
+                "image": "ID1.jpg"
             }
             
         },
@@ -37,7 +37,7 @@
                 "vereda": "San Andrés",
                 "sector": "Hogar Santa Clara",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID2.jpg"
+                "image": "ID2.jpg"
             }
             
         },
