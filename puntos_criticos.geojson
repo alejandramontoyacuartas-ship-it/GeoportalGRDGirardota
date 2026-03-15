@@ -57,7 +57,7 @@
                 "vereda": "San Diego",
                 "sector": "Cabildo - peaje",
                 "marker-color": "#32c8f0",
-                "image": "img/puntos-riesgo/ID3.jpg"
+                "image": "ID3.jpg"
             }
             
         },
@@ -77,7 +77,7 @@
                 "vereda": "Manga Arriba",
                 "sector": "Vivienda en riesgo",
                 "marker-color": "#2dc83c",
-                "image": "img/puntos-riesgo/ID4.jpg"
+                "image": "ID4.jpg"
             }
             
         },
@@ -97,7 +97,7 @@
                 "vereda": "Portachuelo",
                 "sector": "Sendero El Indio",
                 "marker-color": "#e1fa32",
-                "image": "img/puntos-riesgo/ID5.jpg"
+                "image": "ID5.jpg"
             }
             
         },
@@ -117,7 +117,7 @@
                 "vereda": "Sin dato",
                 "sector": "Segunda entrada",
                 "marker-color": "#32c8f0",
-                "image": "img/puntos-riesgo/ID6.jpg"
+                "image": "ID6.jpg"
             }
             
         },
@@ -137,7 +137,7 @@
                 "vereda": "Holanda Alta",
                 "sector": "Quebrada Limonar",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID7.jpg"
+                "image": "ID7.jpg"
             }
             
         },
@@ -157,7 +157,7 @@
                 "vereda": "San Esteban",
                 "sector": "Subdrenaje La Ortega",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID8.jpg"
+                "image": "ID8.jpg"
             }
             
         },
@@ -177,7 +177,7 @@
                 "vereda": "Portachuelo",
                 "sector": "Sendero La Esperanza",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID9.jpg"
+                "image": "ID9.jpg"
             }
             
         },
@@ -197,7 +197,7 @@
                 "vereda": "Sin dato",
                 "sector": "Idarraga",
                 "marker-color": "#e1fa32",
-                "image": "img/puntos-riesgo/ID10.jpg"
+                "image": "ID10.jpg"
             }
             
         },
@@ -217,7 +217,7 @@
                 "vereda": "San Andrés",
                 "sector": "El Piñal",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID11.jpg"
+                "image": "ID11.jpg"
             }
             
         },
@@ -237,7 +237,7 @@
                 "vereda": "San Andrés",
                 "sector": "Hogar Santa Clara",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID12.jpg"
+                "image": "ID12.jpg"
             }
             
         },
@@ -257,7 +257,7 @@
                 "vereda": "Totumo",
                 "sector": "Aserrío",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID13.jpg"
+                "image": "ID13.jpg"
             }
             
         },
@@ -277,7 +277,7 @@
                 "vereda": "Holanda Alta",
                 "sector": "Ramal 12",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID14.jpg"
+                "image": "ID14.jpg"
             }
             
         },
@@ -297,7 +297,7 @@
                 "vereda": "Holanda Alta",
                 "sector": "Limonar",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID15.jpg"
+                "image": "ID15.jpg"
             }
             
         },
@@ -317,7 +317,7 @@
                 "vereda": "Holanda Alta",
                 "sector": "Batea Ramal 12",
                 "marker-color": "#c832b4",
-                "image": "img/puntos-riesgo/ID16.jpg"
+                "image": "ID16.jpg"
             }
             
         },
@@ -337,7 +337,7 @@
                 "vereda": "La Mata",
                 "sector": "Monte La Soledad",
                 "marker-color": "#f03c3c",
-                "image": "img/puntos-riesgo/ID17.jpg"
+                "image": "ID17.jpg"
             }
             
         },
@@ -357,7 +357,7 @@
                 "vereda": "Mercedes Abrego",
                 "sector": "Vivienda en riesgo",
                 "marker-color": "#2dc83c",
-                "image": "img/puntos-riesgo/ID18.jpg"
+                "image": "ID18.jpg"
             }
             
         }
