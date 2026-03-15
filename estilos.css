@@ -563,3 +563,12 @@ tbody tr:last-child td {
     }
 }
 
+#map {
+
+height: 500px;
+width: 100%;
+border-radius: 8px;
+margin-top: 10px;
+
+}
+
