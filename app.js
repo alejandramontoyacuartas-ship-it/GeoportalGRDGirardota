@@ -82,9 +82,9 @@ north.addTo(map);
 
 /* 2. VARIABLES DE LEYENDA Y DE GRAFICOS*/
 let veredasLayer = null;
-let puntosLayer = null;
+let Layer = null;
 
-let puntosData = null;
+let Data = null;
 let veredasData = null;
 
 let graficoRiesgos = null;
@@ -246,8 +246,8 @@ fetch("veredas.geojson")
     });
 
 
-/* 6. CARGAR PUNTOS CRÍTICOS */
-fetch("puntos_críticos.geojson")
+/* 6. CARGAR  CRÍTICOS */
+fetch("puntos_criticos.geojson")
     .then(response => {
         if (!response.ok) {
             throw new Error("No fue posible cargar puntos_criticos.geojson");
@@ -265,7 +265,7 @@ fetch("puntos_críticos.geojson")
         limpiarTabla();
     })
     .catch(error => {
-        console.error("Error cargando puntos críticos:", error);
+        console.error("Error cargando puntos criticos:", error);
     });
 
 /*7. LLENAR SELECTOR DE VEREDAS* (corregido varias veces por IA)*/
