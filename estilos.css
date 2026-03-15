@@ -416,7 +416,7 @@ tbody tr:last-child td {
 
 /* =========================================================
    LEYENDA TEMÁTICA --- ESTE FUE AYUDA DE IA YA QUE NO SE VUALIZABA A GUSTO
-   ========================================================= */
+   ========================================================= 
 .leyenda-panel {
     background: #ffffff;
     border: 1px solid #d9e5da;
@@ -487,6 +487,7 @@ tbody tr:last-child td {
     border: 2px solid rgba(255,255,255,0.8);
     box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
 }
+*/
 
 /* --   14. ESTILOS DE LEAFLET (presentacion del mapa)   -- */
 .leaflet-container {
