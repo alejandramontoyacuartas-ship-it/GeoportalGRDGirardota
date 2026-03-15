@@ -163,171 +163,6 @@ function obtenerDescripcion(properties = {}) {
     );
 }
 
-// =====================================================
-// GEO PORTAL GIRARDOTA - APP.JS 
-// Este archivo controla:
-// 1. Inicialización del mapa
-// 2. Carga de veredas
-// 3. Carga de puntos críticos
-// 4. Llenado automático de selectores
-// 5. Filtro por vereda y tipo de riesgo
-// 6. Tabla de resultados
-// 7. Tarjetas resumen
-// 8. Estadísticas detalladas
-// 9. Gráficos con Chart.js
-// =====================================================
-
-const map = L.map("map", { /*1. CONFIGURACIÓN INICIAL DEL MAPA*/
-    zoomControl: true
-}).setView([6.3778, -75.4467], 13);
-
-/* CAPAS BASE DEL MAPA: VISUALIZACIÓN DE MAPAS TEMÁTICOS */
-
-/* 1. OpenStreetMap estándar */
-const capaOSM = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; OpenStreetMap contributors'
-});
-
-/* 2. Satelital ESRI */
-const capaSatelital = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    {
-        attribution: 'Tiles &copy; Esri'
-    }
-);
-
-/* 3. Terreno / relieve ESRI*/ 
-const capaTerreno = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-    {
-        attribution: 'Tiles &copy; Esri'
-    }
-);
-
-/* 4. Mapa claro */
-const capaClaro = L.tileLayer(
-    "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
-    }
-);
-
-capaOSM.addTo(map);  /*capa del geoportal*/
-
-/*CONTROL DE CAPAS BASE: Permite al usuario escoger el tipo de mapa */
-const mapasBase = {
-    "Mapa base": capaOSM,
-    "Satelital": capaSatelital,
-    "Terreno": capaTerreno,
-    "Mapa claro": capaClaro
-};
-
-L.control.layers(mapasBase, null, {
-    collapsed: false
-}).addTo(map);
-
-/* ESCALA DEL MAPA */
-
-L.control.scale({
-    position: "bottomleft",
-    metric: true,
-    imperial: false
-}).addTo(map);
-
-
-/* NORTE DEL MAPA (NO FUNCIONA, COPIADO  DE LA LIBRERIA Leaflet */ 
-
-const north = L.control({ position: "topright" });
-north.onAdd = function () {
-    const div = L.DomUtil.create("div", "north-arrow");
-    div.innerHTML = '<img src="norte.png" width="70px">';
-    return div;
-};
-north.addTo(map);
-
-/* 2. VARIABLES DE LEYENDA Y DE GRAFICOS*/
-let veredasLayer = null;
-let puntosLayer = null;
-
-let puntosData = null;
-let veredasData = null;
-
-let graficoRiesgos = null;
-let graficoVeredas = null;
-
-/* 3. IDENTIFICACION DE COLORES INSTITUCIONALES DE LA ALCALDIA DE GIRARDOTA 2024-2027*/
-const coloresGraficos = [
-    "#1f5a43",
-    "#2f7a57",
-    "#4f9a6a",
-    "#8ccf4d",
-    "#79b85d",
-    "#5c8f6b",
-    "#aacd8f",
-    "#d7ead8"
-];
-
-
-/* 4. FUNCIONES QUE SE CONSULTARON PARA QUE SE PUEDAN LEER LOS ATRIBUTOS*/
-function obtenerNombreVereda(properties = {}) {
-    return (
-        properties.vereda ||
-        properties.VEREDA ||
-        properties.nombre_vereda ||
-        properties.NOMBRE_VEREDA ||
-        properties.Layer ||
-        properties.layer ||
-        properties.nombre ||
-        properties.NOMBRE ||
-        properties.nombre_ver ||
-        properties.NOM_VEREDA ||
-        properties.vereda_nom ||
-        properties.Vereda ||
-        "Sin dato"
-    );
-}
-
-function obtenerRiesgo(properties = {}) {
-    return (
-        properties.riesgo ||
-        properties.RIESGO ||
-        properties.tipo_riesgo ||
-        properties.TIPO_RIESGO ||
-        properties.evento ||
-        properties.EVENTO ||
-        properties.tipo_evento ||
-        properties.TIPO_EVENTO ||
-        "Sin clasificar"
-    );
-}
-
-function obtenerSector(properties = {}) {
-    return (
-        properties.sector ||
-        properties.SECTOR ||
-        properties.lugar ||
-        properties.LUGAR ||
-        properties.sitio ||
-        properties.SITIO ||
-        properties.subsector ||
-        properties.SUBSECTOR ||
-        "Sin dato"
-    );
-}
-
-function obtenerDescripcion(properties = {}) {
-    return (
-        properties.description ||
-        properties.descripcion ||
-        properties.DESCRIPCION ||
-        properties.observacion ||
-        properties.OBSERVACION ||
-        properties.detalle ||
-        properties.DETALLE ||
-        "Sin descripción"
-    );
-}
-
 function obtenerImage(properties = {}) {
     return (
         properties.image ||
@@ -513,7 +348,7 @@ function llenarSelectorRiesgos(data) {
     console.log("Riesgos cargados:", riesgosOrdenados);
 }
 
-/*N9. CREAR CAPA DE PUNTOS (REVISAR TABLA ORIGINAL DE KML)*/ 
+/*9. CREAR CAPA DE PUNTOS (REVISAR TABLA ORIGINAL DE KML)*/ 
 function obtenerImage(properties = {}) {
     let valor =
         properties.image ||
@@ -562,9 +397,10 @@ function obtenerColorPorRiesgo(riesgo = "") {
 
 function crearCapaPuntos(data) {
 
+    function crearCapaPuntos(data) {
+
     return L.geoJSON(data, {
 
-        /* CREACIÓN DEL MARCADOR */
         pointToLayer: function (feature, latlng) {
 
             const riesgo = obtenerRiesgo(feature.properties);
@@ -578,10 +414,9 @@ function crearCapaPuntos(data) {
                 opacity: 1,
                 fillOpacity: 0.9
             });
+
         },
 
-
-        /* POPUP DE INFORMACIÓN */
         onEachFeature: function (feature, layer) {
 
             const riesgo = obtenerRiesgo(feature.properties);
@@ -598,8 +433,6 @@ function crearCapaPuntos(data) {
                     <b>Descripción:</b> ${descripcion}
             `;
 
-
-            /* IMAGEN DEL EVENTO */
             if (image && image.trim() !== "") {
 
                 popupHTML += `
@@ -627,8 +460,6 @@ function crearCapaPuntos(data) {
 
             popupHTML += `</div>`;
 
-
-            /* ACTIVAR POPUP */
             layer.bindPopup(popupHTML);
 
         }
