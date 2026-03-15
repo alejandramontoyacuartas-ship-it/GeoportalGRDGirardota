@@ -197,7 +197,7 @@ fetch("veredas.geojson")
         return response.json();
     })
     .then(data => {
-        sData = data;
+        sData = data; 
 
         sLayer = L.geoJSON(data, {
             style: function () {
