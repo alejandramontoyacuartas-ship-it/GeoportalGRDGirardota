@@ -556,9 +556,17 @@ function obtenerColorPorRiesgo(riesgo = "") {
     return "#2f7a57";
 }
 
+/* =====================================================
+9. CREAR CAPA DE PUNTOS CRÍTICOS
+===================================================== */
+
 function crearCapaPuntos(data) {
+
     return L.geoJSON(data, {
+
+        /* CREACIÓN DEL MARCADOR */
         pointToLayer: function (feature, latlng) {
+
             const riesgo = obtenerRiesgo(feature.properties);
             const colorMarcador = obtenerColorPorRiesgo(riesgo);
 
@@ -572,7 +580,10 @@ function crearCapaPuntos(data) {
             });
         },
 
+
+        /* POPUP DE INFORMACIÓN */
         onEachFeature: function (feature, layer) {
+
             const riesgo = obtenerRiesgo(feature.properties);
             const vereda = obtenerNombreVereda(feature.properties);
             const sector = obtenerSector(feature.properties);
@@ -587,23 +598,43 @@ function crearCapaPuntos(data) {
                     <b>Descripción:</b> ${descripcion}
             `;
 
+
+            /* IMAGEN DEL EVENTO */
             if (image && image.trim() !== "") {
-    popupHTML += `
-        <br><br>
-        <img 
-            src="${image}" 
-            alt="Imagen del punto crítico"
-            style="width:100%; max-width:240px; border-radius:8px; display:block; border:1px solid #d9e2d9;"
-            onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div style=&quot;color:#666; font-size:12px; margin-top:6px;&quot;>No se encontró la imagen asociada.</div>');"
-        >
-    `;
-}
+
+                popupHTML += `
+                    <br><br>
+                    <img
+                        src="${image}"
+                        alt="Imagen del punto crítico"
+                        style="
+                            width:100%;
+                            max-width:240px;
+                            border-radius:8px;
+                            display:block;
+                            border:1px solid #d9e2d9;
+                        "
+                        onerror="
+                            this.style.display='none';
+                            this.insertAdjacentHTML(
+                                'afterend',
+                                '<div style=&quot;color:#666;font-size:12px;margin-top:6px;&quot;>No se encontró la imagen asociada.</div>'
+                            );
+                        "
+                    >
+                `;
+            }
 
             popupHTML += `</div>`;
 
+
+            /* ACTIVAR POPUP */
             layer.bindPopup(popupHTML);
+
         }
+
     });
+
 }
 
 /* 10. FILTRAR DATOS POR VEREDA Y RIESGO (FORMUALDO POR IA-MODIFICADO ALEJA)*/
