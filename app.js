@@ -233,33 +233,28 @@ fetch("veredas.geojson")
 
 /*  7. CARGA DE PUNTOS CRÍTICOS*/
 fetch("puntos_criticos.geojson")
-.then(response => {
-    if (!response.ok) {
-        throw new Error("No fue posible cargar puntos_criticos.geojson");
-    }
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("No fue posible cargar puntos_criticos.geojson");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("GeoJSON de puntos cargado correctamente:", data);
 
-    return response.json();
-})
-.then(data => {
+        puntosData = data;
 
-    console.log("GeoJSON de puntos cargado correctamente:", data);
+        // Solo llenar selectores
+        llenarSelectorVeredas(data);
+        llenarSelectorRiesgos(data);
 
-    puntosData = data;
-
-    // SOLO llenar selectores
-    llenarSelectorVeredas(data);
-    llenarSelectorRiesgos(data);
-
-    // estadisticas generales
-    calcularEstadisticas(data);
-
-    // tabla vacía
-    limpiarTabla();
-
-})
-.catch(error => {
-    console.error("Error cargando puntos críticos:", error);
-});
+        // Estado inicial vacío
+        limpiarTabla();
+        limpiarEstadisticas();
+    })
+    .catch(error => {
+        console.error("Error cargando puntos críticos:", error);
+    });
 
 /*    8. LLENAR SELECTOR DE VEREDAS*/
 function llenarSelectorVeredas(data) {
@@ -517,9 +512,8 @@ function limpiarTabla() {
     `;
 }
 
-/* =====================================================
-   15. ESTADÍSTICAS
-===================================================== */
+/* 
+   15. ESTADÍSTICAS */
 function calcularEstadisticas(data) {
     if (!data || !data.features) return;
 
@@ -540,11 +534,7 @@ function calcularEstadisticas(data) {
     crearGraficoVeredas(conteoVeredas);
 }
 
-/* =====================================================
-   16. TARJETAS RESUMEN
-   Deben existir en HTML:
-   totalEventos, totalVeredas, eventoPredominante
-===================================================== */
+/*    16. TARJETAS RESUMEN (Deben existir en HTML:totalEventos, totalVeredas, eventoPredominante) */
 function actualizarCardsResumen(data, conteoRiesgos, conteoVeredas) {
     const totalEventosEl = document.getElementById("totalEventos");
     const totalVeredasEl = document.getElementById("totalVeredas");
@@ -573,10 +563,47 @@ function actualizarCardsResumen(data, conteoRiesgos, conteoVeredas) {
     }
 }
 
-/* =====================================================
-   17. DETALLE ESTADÍSTICO
-   Debe existir en HTML: id="estadisticasRiesgo"
-===================================================== */
+
+/*    16.1. FUNCIÓN PARA LIMPIAR ESTADISTICAS */
+function limpiarEstadisticas() {
+    const totalEventosEl = document.getElementById("totalEventos");
+    const totalVeredasEl = document.getElementById("totalVeredas");
+    const eventoPredominanteEl = document.getElementById("eventoPredominante");
+    const contenedor = document.getElementById("estadisticasRiesgo");
+
+    if (totalEventosEl) totalEventosEl.textContent = "-";
+    if (totalVeredasEl) totalVeredasEl.textContent = "-";
+    if (eventoPredominanteEl) eventoPredominanteEl.textContent = "-";
+
+    if (contenedor) {
+        contenedor.innerHTML = `
+            <div class="item-estadistica">
+                <span>Sin información cargada</span>
+                <span>-</span>
+            </div>
+        `;
+    }
+
+    if (graficoRiesgos) {
+        graficoRiesgos.destroy();
+        graficoRiesgos = null;
+    }
+
+    if (graficoVeredas) {
+        graficoVeredas.destroy();
+        graficoVeredas = null;
+    }
+}
+
+
+
+
+
+
+
+
+/*  17. DETALLE ESTADÍSTICO
+   Debe existir en HTML: id="estadisticasRiesgo" */
 function mostrarDetalleEstadistico(conteoRiesgos) {
     const contenedor = document.getElementById("estadisticasRiesgo");
 
@@ -606,10 +633,8 @@ function mostrarDetalleEstadistico(conteoRiesgos) {
     });
 }
 
-/* =====================================================
-   18. GRÁFICO DE RIESGOS
-   Debe existir canvas con id="graficoRiesgos"
-===================================================== */
+/*  18. GRÁFICO DE RIESGOS
+   Debe existir canvas con id="graficoRiesgos" */
 function crearGraficoRiesgos(conteoRiesgos) {
     const canvas = document.getElementById("graficoRiesgos");
 
@@ -660,8 +685,7 @@ function crearGraficoRiesgos(conteoRiesgos) {
     });
 }
 
-/* =====================================================
-   19. GRÁFICO DE VEREDAS
+/*  19. GRÁFICO DE VEREDAS
    Debe existir canvas con id="graficoVeredas"
 ===================================================== */
 function crearGraficoVeredas(conteoVeredas) {
@@ -704,9 +728,7 @@ function crearGraficoVeredas(conteoVeredas) {
     });
 }
 
-/* =====================================================
-   20. EXPONER FUNCIONES PARA BOTONES HTML
-===================================================== */
+/*  20. EXPONER FUNCIONES PARA BOTONES HTML */
 window.filtrarDatos = filtrarDatos;
 window.limpiarFiltro = limpiarFiltro;
 
