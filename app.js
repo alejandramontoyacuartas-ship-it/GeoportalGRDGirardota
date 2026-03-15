@@ -187,15 +187,6 @@ function obtenerColorPorRiesgo(riesgo = "") {
     return "#2f7a57";
 }
 
-function obtenerColorPorRiesgo(riesgo = "") {
-    const valor = riesgo.toLowerCase().trim();
-
-    if (valor.includes("avenida")) return "#c542b3";
-    if (valor.includes("inund")) return "#4db7ff";
-    if (valor.includes("estruct")) return "#57b85c";
-    if (valor.includes("socav") || valor.includes("hund")) return "#d9e73f";
-    if (valor.includes("movimiento") || valor.includes("masa")) return "#f04b44";return "#2f7a57";
-}
 
 /* 5. CARGAR CAPA DE VEREDAS - GEOJSON ARGIS SHP*/
 fetch("data/veredas.geojson")
@@ -359,7 +350,7 @@ function llenarSelectorRiesgos(data) {
     console.log("Riesgos cargados:", riesgosOrdenados);
 }
 
-/*N9. CREAR CAPA DE PUNTOS (REVISAR TABLA ORIGINAL DE KML)*/ 
+/*9. CREAR CAPA DE PUNTOS (REVISAR TABLA ORIGINAL DE KML)*/ 
 function crearCapaPuntos(data) {
     return L.geoJSON(data, {
         pointToLayer: function (feature, latlng) {
