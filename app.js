@@ -188,18 +188,18 @@ function obtenerColorPorRiesgo(riesgo = "") {
 }
 
 
-/* 5. CARGAR CAPA DE S - GEOJSON ARGIS SHP*/
+/* 5. CARGAR CAPA DE VEREDAS */
 fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar s.geojson"); /*renglon de IA*/
+            throw new Error("No fue posible cargar veredas.geojson");
         }
         return response.json();
     })
     .then(data => {
-        sData = data; 
+        veredasData = data;
 
-        sLayer = L.geoJSON(data, {
+        veredasLayer = L.geoJSON(data, {
             style: function () {
                 return {
                     color: "#2f7a57",
@@ -209,21 +209,20 @@ fetch("veredas.geojson")
                 };
             },
             onEachFeature: function (feature, layer) {
-                const nombre = obtenerNombre(feature.properties);
+                const nombreVereda = obtenerNombreVereda(feature.properties);
 
                 layer.bindPopup(`
                     <div>
-                        <b>:</b> ${nombre}
+                        <b>Vereda:</b> ${nombreVereda}
                     </div>
                 `);
 
-                layer.bindTooltip(nombre, {
+                layer.bindTooltip(nombreVereda, {
                     permanent: false,
                     direction: "center",
-                    className: "tooltip-"
+                    className: "tooltip-vereda"
                 });
 
-                /* Resaltar la  al pasar el mouse*/
                 layer.on({
                     mouseover: function (e) {
                         e.target.setStyle({
@@ -233,22 +232,22 @@ fetch("veredas.geojson")
                         });
                     },
                     mouseout: function (e) {
-                        sLayer.resetStyle(e.target);
+                        veredasLayer.resetStyle(e.target);
                     }
                 });
             }
         }).addTo(map);
 
-        if (sLayer.getBounds && sLayer.getBounds().isValid()) {
-            map.fitBounds(sLayer.getBounds(), { padding: [20, 20] });
+        if (veredasLayer.getBounds && veredasLayer.getBounds().isValid()) {
+            map.fitBounds(veredasLayer.getBounds(), { padding: [20, 20] });
         }
     })
     .catch(error => {
-        console.error("Error cargando s:", error);
+        console.error("Error cargando veredas:", error);
     });
 
 
-/* 6. CARGAR PUNTOS CRÍTICOS: archivo kml a geijson (io)*/
+/* 6. CARGAR PUNTOS CRÍTICOS */
 fetch("puntos_criticos.geojson")
     .then(response => {
         if (!response.ok) {
@@ -261,7 +260,7 @@ fetch("puntos_criticos.geojson")
 
         puntosData = data;
 
-        llenarSelectors(data);
+        llenarSelectorVeredas(data);
         llenarSelectorRiesgos(data);
         calcularEstadisticas(data);
         limpiarTabla();
