@@ -75,7 +75,7 @@ L.control.scale({
 const north = L.control({ position: "topright" });
 north.onAdd = function () {
     const div = L.DomUtil.create("div", "north-arrow");
-    div.innerHTML = '<img src="img/norte.png" width="70px">';
+    div.innerHTML = '<img src="norte.png" width="70px">';
     return div;
 };
 north.addTo(map);
@@ -197,11 +197,11 @@ function obtenerColorPorRiesgo(riesgo = "") {
     if (valor.includes("movimiento") || valor.includes("masa")) return "#f04b44";return "#2f7a57";
 }
 
-/* 5. CARGAR CAPA DE VEREDAS - GEOJSON ARGIS SHP*/
+/* 5. CARGAR CAPA DE VEREDAS */
 fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar data/veredas.geojson"); /*renglon de IA*/
+            throw new Error("No fue posible cargar veredas.geojson");
         }
         return response.json();
     })
@@ -232,7 +232,6 @@ fetch("veredas.geojson")
                     className: "tooltip-vereda"
                 });
 
-                /* Resaltar la vereda al pasar el mouse*/
                 layer.on({
                     mouseover: function (e) {
                         e.target.setStyle({
@@ -257,11 +256,11 @@ fetch("veredas.geojson")
     });
 
 
-/* 6. CARGAR PUNTOS CRÍTICOS: archivo kml a geijson (io)*/
+/* 6. CARGAR PUNTOS CRÍTICOS */
 fetch("puntos_criticos.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar data/puntos_criticos.geojson");
+            throw new Error("No fue posible cargar puntos_criticos.geojson");
         }
         return response.json();
     })
