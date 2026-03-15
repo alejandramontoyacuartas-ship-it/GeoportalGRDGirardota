@@ -1,0 +1,636 @@
+/* =========================================================
+   GEO PORTAL GIRARDOTA - estilos.css
+   =========================================================
+   Este archivo se organiza: 
+   - Variables color
+   - Estilos generales
+   - Presentacion o estilo principal de visualización:Encabezado, tamaño del panel de filtros, botones,panel de mapa
+     presentación y visualización de las tablas de información y de resultados estadisticos, estilos de graficos, presentacion de estadisticas, Popups Leaflet
+*/
+
+
+/*  1. Variaables generales de color DE COLOR: presentacion visual del geoporal
+ */
+:root {
+    --verde-oscuro: #1f5a43;
+    --verde-principal: #2f7a57;
+    --verde-medio: #4f9a6a;
+    --verde-claro: #8ccf4d;
+    --verde-suave: #eaf5ea;
+
+    --blanco: #ffffff;
+    --gris-fondo: #f5f7f4;
+    --gris-borde: #d9e5da;
+
+    --texto-oscuro: #1e3d2f;
+    --texto-secundario: #4c6658;
+
+    --sombra-suave: 0 4px 14px rgba(31, 90, 67, 0.12);
+    --sombra-media: 0 6px 18px rgba(31, 90, 67, 0.16);
+    --radio-grande: 14px;
+    --radio-medio: 12px;
+    --radio-pequeno: 8px;
+}
+
+/* 2. Estilos de presentación del Geoportal */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--gris-fondo);
+    color: var(--texto-oscuro);
+}
+
+body {
+    min-height: 100vh;
+}
+
+
+/* 3. Contenedor o presentación: tamaños: anchos, largos, etc
+*/
+.container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 18px;
+}
+
+/* 4. Encabezado del Geoportal
+*/
+.header {
+    background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-principal));
+    color: var(--blanco);
+    padding: 22px 24px;
+    border-radius: var(--radio-grande);
+    margin-bottom: 18px;
+    box-shadow: var(--sombra-media);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto visual suave para que el encabezado no se vea plano */
+.header::after {
+    content: "";
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+}
+
+.header h1 {
+    margin: 0 0 6px 0;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
+}
+
+.header p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.92);
+    position: relative;
+    z-index: 1;
+}
+
+/* 5. PANEL De filtros */
+.filtros-panel {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio-grande);
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--sombra-suave);
+}
+
+.filtros-panel h2 {
+    margin: 0 0 12px 0;
+    font-size: 19px;
+    color: var(--verde-oscuro);
+}
+
+.filtros-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.filtros-grid label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #355646;
+}
+
+#riesgoSelect,
+#veredaSelect {
+    min-width: 230px;
+    max-width: 260px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #c9d8cb;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 14px;
+    color: #1e3d2f;
+    outline: none;
+    appearance: auto;
+    transition: all 0.2s ease;
+}
+
+#riesgoSelect:focus,
+#veredaSelect:focus {
+    border-color: #2f7a57;
+    box-shadow: 0 0 0 3px rgba(47, 122, 87, 0.14);
+}
+
+/*  6. BOTONES 
+*/
+button {
+    border: none;
+    border-radius: var(--radio-pequeno);
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(31, 90, 67, 0.16);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.btn-filtrar {
+    background: linear-gradient(135deg, var(--verde-principal), var(--verde-medio));
+    color: var(--blanco);
+}
+
+.btn-limpiar {
+    background: var(--verde-claro);
+    color: var(--texto-oscuro);
+}
+
+/* 7. Estructura de las columnas
+   
+   Izquierda:
+   - mapa
+   - tabla
+   Derecha:
+   - panel estadístico
+ */
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 8. PANEL DEL MAPA
+*/
+.map-panel {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio-grande);
+    padding: 14px;
+    box-shadow: var(--sombra-suave);
+}
+
+.map-panel h2 {
+    margin: 0 0 12px 0;
+    font-size: 19px;
+    color: var(--verde-oscuro);
+}
+
+#map {
+    width: 100%; /* Este id debe coincidir exactamente con el usado en index.html y app.js. */
+    height: 560px;
+    border-radius: var(--radio-medio);
+    border: 1px solid var(--gris-borde);
+    overflow: hidden;
+    background: #edf5ee;
+}
+
+/* 9. Tabla de analisis estadistico */
+.table-panel {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio-grande);
+    padding: 14px;
+    box-shadow: var(--sombra-suave);
+}
+
+.table-panel h2 {
+    margin: 0 0 12px 0;
+    font-size: 19px;
+    color: var(--verde-oscuro);
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+}
+
+/* aca La tabla esta amplitud mínima para no romper columnas y vuslizarse mejor en el geoportal */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+    background: var(--blanco);
+}
+
+thead {
+    background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-principal));
+    color: var(--blanco);
+}
+
+thead th {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+tbody td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #e8efe9;
+    font-size: 14px;
+    color: var(--texto-secundario);
+    vertical-align: top;
+    line-height: 1.4;
+}
+
+tbody tr {
+    transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #f2f8f2;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 10. DASHBOARD GENERAL DE LA VISUALIZACIÓN DEL GEOPORTAL */
+
+.dashboard-panel {
+    background: var(--blanco);
+    border: 1px solid var(--gris-borde);
+    padding: 18px;
+    border-radius: var(--radio-grande);
+    box-shadow: var(--sombra-suave);
+}
+
+.dashboard-panel h2 {
+    margin: 0 0 15px 0;
+    color: var(--verde-oscuro);
+    font-size: 22px;
+}
+
+/* 11. TARJETAS RESUMEN */
+.cards-resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.card-resumen {
+    background: linear-gradient(135deg, #fdfefd, var(--verde-suave));
+    border-left: 5px solid var(--verde-principal);
+    padding: 14px;
+    border-radius: var(--radio-medio);
+    box-shadow: 0 2px 8px rgba(31, 90, 67, 0.08);
+}
+
+.card-resumen h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--texto-secundario);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.card-resumen p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    word-break: break-word;
+}
+
+/* -- 12. CAJAS DE GRÁFICOS- SE MANEJO PARA TODA VISUALIZACIÓN COLORES REPRESENTAATIVOS DE ESTE PERIODO DE ALCALDÍA -- */
+.grafico-box {
+    background: #fcfefc;
+    border: 1px solid var(--gris-borde);
+    border-radius: var(--radio-medio);
+    padding: 15px;
+    margin-bottom: 18px;
+}
+
+.grafico-box h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 17px;
+    color: var(--verde-oscuro);
+}
+
+.grafico-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+}
+
+#graficoRiesgos, /* Revisar que coincidan con html */
+#graficoVeredas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* 13. ESTILO PARA LOS ANALISIS ESTADISTICOS (PANELES DERECHOS GEOPORTAL) -- */
+.panel-estadisticas {
+    background: var(--blanco);
+    padding: 10px 0 0 0;
+}
+
+.panel-estadisticas h3 {
+    margin: 0 0 10px 0;
+    font-size: 17px;
+    color: var(--verde-oscuro);
+}
+
+.item-estadistica {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    margin-bottom: 8px;
+    background: #f4f9f4;
+    border-left: 4px solid var(--verde-medio);
+    border-radius: var(--radio-pequeno);
+    font-size: 14px;
+}
+
+.item-estadistica span:first-child {
+    font-weight: 600;
+    color: var(--texto-oscuro);
+}
+
+.item-estadistica span:last-child {
+    background: var(--verde-medio);
+    color: var(--blanco);
+    padding: 3px 9px;
+    border-radius: 18px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   LEYENDA TEMÁTICA --- ESTE FUE AYUDA DE IA YA QUE NO SE VUALIZABA A GUSTO
+   ========================================================= */
+.leyenda-panel {
+    background: #ffffff;
+    border: 1px solid #d9e5da;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-top: 18px;
+    box-shadow: 0 4px 14px rgba(31, 90, 67, 0.10);
+}
+
+.leyenda-panel h3 {
+    margin: 0 0 14px 0;
+    color: #0f5b43;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.item-leyenda {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e3d2f;
+    line-height: 1.3;
+}
+
+.item-leyenda:last-child {
+    margin-bottom: 0;
+}
+
+.leyenda-panel {
+    background: #22365e;
+    border-radius: 18px;
+    padding: 22px 20px;
+    margin-top: 18px;
+    color: #ffffff;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    border: none;
+}
+
+.leyenda-panel h3 {
+    margin: 0 0 18px 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.item-leyenda {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.item-leyenda:last-child {
+    margin-bottom: 0;
+}
+
+.color-leyenda {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid rgba(255,255,255,0.8);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+/* --   14. ESTILOS DE LEAFLET (presentacion del mapa)   -- */
+.leaflet-container {
+    border-radius: var(--radio-medio);
+}
+
+.leaflet-popup-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--texto-oscuro);
+}
+
+.leaflet-popup-content img {
+    margin-top: 6px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 8px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Personalización opcional del popup */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+}
+
+.leaflet-popup-tip {
+    background: var(--blanco);
+}
+
+.tooltip-vereda {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #d9e5da;
+    color: #1f5a43;
+    font-weight: 700;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(31, 90, 67, 0.12);
+}
+
+/* 15. MENSAJES AUXILIARES */
+.info-text {
+    font-size: 13px;
+    color: var(--texto-secundario);
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* 16. OTROS ELEMENTOS OPCIONALES DE APOYO VISUAL (LINEAS, FONDOS, ETC) */
+.badge-verde {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--verde-claro);
+    color: var(--texto-oscuro);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.subtitulo-verde {
+    color: var(--verde-medio);
+    font-weight: 600;
+}
+
+
+/* 17. RESPONSIVE TABLET (APOYO IA) */
+@media (max-width: 1100px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cards-resumen {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #map {
+        height: 500px;
+    }
+}
+
+/*  18. RESPONSIVE MÓVIL (APOYO IA) */
+@media (max-width: 768px) {
+    .container {
+        padding: 12px;
+    }
+
+    .header {
+        padding: 16px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header p {
+        font-size: 14px;
+    }
+
+    .filtros-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #veredaSelect,
+    button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .cards-resumen {
+        grid-template-columns: 1fr;
+    }
+
+    .grafico-container {
+        height: 280px;
+    }
+
+    #map {
+        height: 420px;
+    }
+
+    thead th,
+    tbody td {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+}
+
+/* 19. RESPONSIVE MÓVIL PEQUEÑO (APOYO IA) */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .map-panel,
+    .table-panel,
+    .dashboard-panel,
+    .filtros-panel {
+        padding: 12px;
+    }
+
+    #map {
+        height: 360px;
+    }
+
+    .grafico-container {
+        height: 250px;
+    }
+}

@@ -1,0 +1,365 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.47523574832596,
+                    6.377579695940626
+                ]
+            },
+            "properties": {
+                "id": 1,
+                "riesgo": "Avenida Torrencial",
+                "description": "Zona de afectación quebrada Limonar Yamaha",
+                "vereda": "San Esteban",
+                "sector": "Yamaha",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID1.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.43924710033343,
+                    6.399825361486771
+                ]
+            },
+            "properties": {
+                "id": 2,
+                "riesgo": "Avenida Torrencial",
+                "description": "Quebrada La Correa",
+                "vereda": "San Andrés",
+                "sector": "Hogar Santa Clara",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID2.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.42117106131654,
+                    6.399559237306079
+                ]
+            },
+            "properties": {
+                "id": 3,
+                "riesgo": "Inundación",
+                "description": "Zona de inundación",
+                "vereda": "San Diego",
+                "sector": "Cabildo - peaje",
+                "marker-color": "#32c8f0",
+                "image": "img/puntos-riesgo/ID3.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.46294631159408,
+                    6.357194139981358
+                ]
+            },
+            "properties": {
+                "id": 4,
+                "riesgo": "Estructural",
+                "description": "Vivienda en riesgo de ruina",
+                "vereda": "Manga Arriba",
+                "sector": "Vivienda en riesgo",
+                "marker-color": "#2dc83c",
+                "image": "img/puntos-riesgo/ID4.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.48255169491779,
+                    6.390406180719934
+                ]
+            },
+            "properties": {
+                "id": 5,
+                "riesgo": "Socavación",
+                "description": "Sendero El Indio - Quebrada Telesfora",
+                "vereda": "Portachuelo",
+                "sector": "Sendero El Indio",
+                "marker-color": "#e1fa32",
+                "image": "img/puntos-riesgo/ID5.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.4673299363131,
+                    6.378994426166122
+                ]
+            },
+            "properties": {
+                "id": 6,
+                "riesgo": "Inundación",
+                "description": "Segunda entrada - acumulación de agua lluvia",
+                "vereda": "Sin dato",
+                "sector": "Segunda entrada",
+                "marker-color": "#32c8f0",
+                "image": "img/puntos-riesgo/ID6.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.48886228626017,
+                    6.401219546998163
+                ]
+            },
+            "properties": {
+                "id": 7,
+                "riesgo": "Movimiento en Masa",
+                "description": "Punto evaluativo movimiento en masa",
+                "vereda": "Holanda Alta",
+                "sector": "Quebrada Limonar",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID7.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.4683611,
+                    6.396856620395861
+                ]
+            },
+            "properties": {
+                "id": 8,
+                "riesgo": "Avenida Torrencial",
+                "description": "Avenida torrencial vereda San Esteban",
+                "vereda": "San Esteban",
+                "sector": "Subdrenaje La Ortega",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID8.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.48215183616739,
+                    6.396408004829046
+                ]
+            },
+            "properties": {
+                "id": 9,
+                "riesgo": "Avenida Torrencial",
+                "description": "Sendero La Esperanza - quebrada Telesfora",
+                "vereda": "Portachuelo",
+                "sector": "Sendero La Esperanza",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID9.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.41724560909431,
+                    6.368610439003934
+                ]
+            },
+            "properties": {
+                "id": 10,
+                "riesgo": "Hundimiento",
+                "description": "Zona crítica de inestabilidad geotécnica",
+                "vereda": "Sin dato",
+                "sector": "Idarraga",
+                "marker-color": "#e1fa32",
+                "image": "img/puntos-riesgo/ID10.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.43693947627212,
+                    6.398079741653251
+                ]
+            },
+            "properties": {
+                "id": 11,
+                "riesgo": "Movimiento en Masa",
+                "description": "Inestabilidad geotécnica",
+                "vereda": "San Andrés",
+                "sector": "El Piñal",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID11.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.43914644887954,
+                    6.399889468369054
+                ]
+            },
+            "properties": {
+                "id": 12,
+                "riesgo": "Avenida Torrencial",
+                "description": "Qda Correa vereda San Andrés",
+                "vereda": "San Andrés",
+                "sector": "Hogar Santa Clara",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID12.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.45759871831133,
+                    6.376850629623223
+                ]
+            },
+            "properties": {
+                "id": 13,
+                "riesgo": "Movimiento en Masa",
+                "description": "Inestabilidad geotécnica - corte de talud",
+                "vereda": "Totumo",
+                "sector": "Aserrío",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID13.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.47225523982476,
+                    6.405791594958449
+                ]
+            },
+            "properties": {
+                "id": 14,
+                "riesgo": "Movimiento en Masa",
+                "description": "Inestabilidad geotécnica",
+                "vereda": "Holanda Alta",
+                "sector": "Ramal 12",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID14.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.48749926270608,
+                    6.406693141637366
+                ]
+            },
+            "properties": {
+                "id": 15,
+                "riesgo": "Movimiento en Masa",
+                "description": "Holanda Alta - Limonar",
+                "vereda": "Holanda Alta",
+                "sector": "Limonar",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID15.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.47504856113736,
+                    6.405432790727937
+                ]
+            },
+            "properties": {
+                "id": 16,
+                "riesgo": "Avenida Torrencial",
+                "description": "Batea",
+                "vereda": "Holanda Alta",
+                "sector": "Batea Ramal 12",
+                "marker-color": "#c832b4",
+                "image": "img/puntos-riesgo/ID16.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.47131775587134,
+                    6.416365044735601
+                ]
+            },
+            "properties": {
+                "id": 17,
+                "riesgo": "Movimiento en Masa",
+                "description": "Monte La Soledad vereda La Mata",
+                "vereda": "La Mata",
+                "sector": "Monte La Soledad",
+                "marker-color": "#f03c3c",
+                "image": "img/puntos-riesgo/ID17.jpg"
+            }
+            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -75.45894431147187,
+                    6.408183937487962
+                ]
+            },
+            "properties": {
+                "id": 18,
+                "riesgo": "Estructural",
+                "description": "Vivienda en riesgo - Mercedes Abrego",
+                "vereda": "Mercedes Abrego",
+                "sector": "Vivienda en riesgo",
+                "marker-color": "#2dc83c",
+                "image": "img/puntos-riesgo/ID18.jpg"
+            }
+            
+        }
+    ]
+}
