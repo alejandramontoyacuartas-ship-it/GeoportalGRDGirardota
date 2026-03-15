@@ -1,96 +1,89 @@
 // =====================================================
-// GEO PORTAL GIRARDOTA - APP.JS 
-// Este archivo controla:
+// GEO PORTAL GIRARDOTA - APP.JS
+// Versión final depurada para GitHub
+// Controla:
 // 1. Inicialización del mapa
-// 2. Carga de veredas
-// 3. Carga de puntos críticos
-// 4. Llenado automático de selectores
-// 5. Filtro por vereda y tipo de riesgo
-// 6. Tabla de resultados
-// 7. Tarjetas resumen
-// 8. Estadísticas detalladas
-// 9. Gráficos con Chart.js
+// 2. Capas base
+// 3. Carga de veredas
+// 4. Carga de puntos críticos
+// 5. Llenado de selectores
+// 6. Filtros por vereda y riesgo
+// 7. Tabla de resultados
+// 8. Tarjetas resumen
+// 9. Estadísticas
+// 10. Gráficos con Chart.js
 // =====================================================
 
 const map = L.map("map", {
     zoomControl: true
 }).setView([6.3778, -75.4467], 13);
 
-/* CAPAS BASE DEL MAPA: VISUALIZACIÓN DE MAPAS TEMÁTICOS */
-
-/* 1. OpenStreetMap estándar */
+/* =====================================================
+   1. CAPAS BASE
+===================================================== */
 const capaOSM = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: "&copy; OpenStreetMap contributors"
 });
 
-/* 2. Satelital ESRI */
 const capaSatelital = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    {
-        attribution: 'Tiles &copy; Esri'
-    }
+    { attribution: "Tiles &copy; Esri" }
 );
 
-/* 3. Terreno / relieve ESRI*/ 
 const capaTerreno = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-    {
-        attribution: 'Tiles &copy; Esri'
-    }
+    { attribution: "Tiles &copy; Esri" }
 );
 
-/* 4. Mapa claro */
 const capaClaro = L.tileLayer(
     "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    {
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
-    }
+    { attribution: "&copy; OpenStreetMap &copy; CARTO" }
 );
 
-capaOSM.addTo(map);  /*capa del geoportal*/
+// Capa visible por defecto
+capaOSM.addTo(map);
 
-/*CONTROL DE CAPAS BASE: Permite al usuario escoger el tipo de mapa */
-const mapasBase = {
-    "Mapa base": capaOSM,
-    "Satelital": capaSatelital,
-    "Terreno": capaTerreno,
-    "Mapa claro": capaClaro
-};
+// Control de capas
+L.control.layers(
+    {
+        "Mapa base": capaOSM,
+        "Satelital": capaSatelital,
+        "Terreno": capaTerreno,
+        "Mapa claro": capaClaro
+    },
+    null,
+    { collapsed: false }
+).addTo(map);
 
-L.control.layers(mapasBase, null, {
-    collapsed: false
-}).addTo(map);
-
-/* ESCALA DEL MAPA */
-
+// Escala
 L.control.scale({
     position: "bottomleft",
     metric: true,
     imperial: false
 }).addTo(map);
 
-
-/* NORTE DEL MAPA (NO FUNCIONA, COPIADO  DE LA LIBRERIA Leaflet */ 
-
+/* =====================================================
+   2. NORTE DEL MAPA
+   Debe existir la imagen norte.png en la ruta indicada.
+===================================================== */
 const north = L.control({ position: "topright" });
 north.onAdd = function () {
     const div = L.DomUtil.create("div", "north-arrow");
-    div.innerHTML = '<img src="img/norte.png" width="70px">';
+    div.innerHTML = '<img src="img/norte.png" width="70" alt="Norte" onerror="this.style.display=\'none\'">';
     return div;
 };
 north.addTo(map);
 
-/* 2. VARIABLES DE LEYENDA Y DE GRAFICOS*/
-let sLayer = null;
+/* =====================================================
+   3. VARIABLES GLOBALES
+===================================================== */
+let veredasLayer = null;
 let puntosLayer = null;
-
 let puntosData = null;
-let sData = null;
-
+let veredasData = null;
 let graficoRiesgos = null;
-let graficos = null;
+let graficoVeredas = null;
 
-/* 3. IDENTIFICACION DE COLORES INSTITUCIONALES DE LA ALCALDIA DE GIRARDOTA 2024-2027*/
 const coloresGraficos = [
     "#1f5a43",
     "#2f7a57",
@@ -102,8 +95,11 @@ const coloresGraficos = [
     "#d7ead8"
 ];
 
-
-/* 4. FUNCIONES QUE SE CONSULTARON PARA QUE SE PUEDAN LEER LOS ATRIBUTOS*/
+/* =====================================================
+   4. FUNCIONES DE LECTURA DE ATRIBUTOS
+   Esto permite leer datos aunque cambien los nombres
+   de los campos en el GeoJSON.
+===================================================== */
 function obtenerNombreVereda(properties = {}) {
     return (
         properties.vereda ||
@@ -175,6 +171,9 @@ function obtenerImage(properties = {}) {
     );
 }
 
+/* =====================================================
+   5. COLOR SEGÚN TIPO DE RIESGO
+===================================================== */
 function obtenerColorPorRiesgo(riesgo = "") {
     const valor = String(riesgo).toLowerCase().trim();
 
@@ -187,8 +186,9 @@ function obtenerColorPorRiesgo(riesgo = "") {
     return "#2f7a57";
 }
 
-
-/* 5. CARGAR CAPA DE VEREDAS */
+/* =====================================================
+   6. CARGA DE VEREDAS
+===================================================== */
 fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
@@ -232,7 +232,9 @@ fetch("veredas.geojson")
                         });
                     },
                     mouseout: function (e) {
-                        veredasLayer.resetStyle(e.target);
+                        if (veredasLayer) {
+                            veredasLayer.resetStyle(e.target);
+                        }
                     }
                 });
             }
@@ -246,8 +248,11 @@ fetch("veredas.geojson")
         console.error("Error cargando veredas:", error);
     });
 
-
-/* 6. CARGAR PUNTOS CRÍTICOS */
+/* =====================================================
+   7. CARGA DE PUNTOS CRÍTICOS
+   Aquí queda corregido el problema principal:
+   al cargar el GeoJSON, los puntos se pintan de una vez.
+===================================================== */
 fetch("puntos_criticos.geojson")
     .then(response => {
         if (!response.ok) {
@@ -260,16 +265,24 @@ fetch("puntos_criticos.geojson")
 
         puntosData = data;
 
+        // Cargar puntos al abrir el geoportal
+        puntosLayer = crearCapaPuntos(data).addTo(map);
+
+        // Llenar selectores
         llenarSelectorVeredas(data);
         llenarSelectorRiesgos(data);
+
+        // Tabla y estadísticas iniciales
+        generarTabla(data);
         calcularEstadisticas(data);
-        limpiarTabla();
     })
     .catch(error => {
         console.error("Error cargando puntos críticos:", error);
     });
 
-/*7. LLENAR SELECTOR DE veredas* (corregido varias veces por IA)*/
+/* =====================================================
+   8. LLENAR SELECTOR DE VEREDAS
+===================================================== */
 function llenarSelectorVeredas(data) {
     const select = document.getElementById("veredaSelect");
     if (!select) return;
@@ -299,6 +312,9 @@ function llenarSelectorVeredas(data) {
     console.log("Veredas cargadas:", Array.from(veredasUnicas));
 }
 
+/* =====================================================
+   9. LLENAR SELECTOR DE RIESGOS
+===================================================== */
 function llenarSelectorRiesgos(data) {
     const select = document.getElementById("riesgoSelect");
     if (!select) return;
@@ -328,48 +344,9 @@ function llenarSelectorRiesgos(data) {
     console.log("Riesgos cargados:", Array.from(riesgosUnicos));
 }
 
-/* 8. LLENAR SELECTOR DE RIESGOS*/
-
-function llenarSelectorRiesgos(data) {
-    const select = document.getElementById("riesgoSelect");
-
-    if (!select) {
-        console.warn("No existe el select con id 'riesgoSelect'.");
-        return;
-    }
-
-    select.innerHTML = `<option value="">Todos los riesgos</option>`;
-
-    if (!data || !data.features || !Array.isArray(data.features)) {
-        return;
-    }
-
-    const riesgosUnicos = new Set();
-
-    data.features.forEach(feature => {
-        const riesgo = obtenerRiesgo(feature.properties).trim();
-
-        if (riesgo && riesgo !== "Sin clasificar") {
-            riesgosUnicos.add(riesgo);
-        }
-    });
-
-    const riesgosOrdenados = Array.from(riesgosUnicos).sort((a, b) =>
-        a.localeCompare(b, "es", { sensitivity: "base" })
-    );
-
-    riesgosOrdenados.forEach(riesgo => {
-        const option = document.createElement("option");
-        option.value = riesgo;
-        option.textContent = riesgo;
-        select.appendChild(option);
-    });
-
-    console.log("Riesgos cargados:", riesgosOrdenados);
-}
-
-
-/*9. CREAR CAPA DE PUNTOS criticos (REVISAR TABLA ORIGINAL DE KML)*/ 
+/* =====================================================
+   10. CREAR CAPA DE PUNTOS
+===================================================== */
 function crearCapaPuntos(data) {
     return L.geoJSON(data, {
         pointToLayer: function (feature, latlng) {
@@ -420,8 +397,9 @@ function crearCapaPuntos(data) {
     });
 }
 
-
-/* 10. FILTRAR DATOS POR VEREDA Y RIESGO (FORMUALDO POR IA-MODIFICADO ALEJA)*/
+/* =====================================================
+   11. FILTRAR DATOS
+===================================================== */
 function filtrarDatos() {
     const veredaSeleccionada = document.getElementById("veredaSelect")?.value.trim() || "";
     const riesgoSeleccionado = document.getElementById("riesgoSelect")?.value.trim() || "";
@@ -431,6 +409,7 @@ function filtrarDatos() {
         return;
     }
 
+    // Quitar capa anterior para volverla a pintar filtrada
     if (puntosLayer && map.hasLayer(puntosLayer)) {
         map.removeLayer(puntosLayer);
     }
@@ -453,18 +432,20 @@ function filtrarDatos() {
     if (filtrados.features.length > 0) {
         puntosLayer = crearCapaPuntos(filtrados).addTo(map);
 
-        if (puntosLayer.getBounds().isValid()) {
+        if (puntosLayer.getBounds && puntosLayer.getBounds().isValid()) {
             map.fitBounds(puntosLayer.getBounds(), { padding: [30, 30] });
         }
+    } else {
+        puntosLayer = null;
     }
 
     generarTabla(filtrados);
     calcularEstadisticas(filtrados);
 }
 
-window.filtrarDatos = filtrarDatos;
-
-/* 11. LIMPIAR FILTRO*/
+/* =====================================================
+   12. LIMPIAR FILTRO
+===================================================== */
 function limpiarFiltro() {
     const veredaSelect = document.getElementById("veredaSelect");
     const riesgoSelect = document.getElementById("riesgoSelect");
@@ -472,22 +453,31 @@ function limpiarFiltro() {
     if (veredaSelect) veredaSelect.value = "";
     if (riesgoSelect) riesgoSelect.value = "";
 
+    if (!puntosData || !Array.isArray(puntosData.features)) {
+        return;
+    }
+
     if (puntosLayer && map.hasLayer(puntosLayer)) {
         map.removeLayer(puntosLayer);
     }
 
-    limpiarTabla();
+    // Volver a cargar todos los puntos
+    puntosLayer = crearCapaPuntos(puntosData).addTo(map);
 
-    if (puntosData) {
-        calcularEstadisticas(puntosData);
-    }
+    generarTabla(puntosData);
+    calcularEstadisticas(puntosData);
 
-    if (veredasLayer && veredasLayer.getBounds().isValid()) {
+    if (veredasLayer && veredasLayer.getBounds && veredasLayer.getBounds().isValid()) {
         map.fitBounds(veredasLayer.getBounds(), { padding: [20, 20] });
+    } else if (puntosLayer && puntosLayer.getBounds && puntosLayer.getBounds().isValid()) {
+        map.fitBounds(puntosLayer.getBounds(), { padding: [20, 20] });
     }
 }
-/*
-// 12. GENERAR TABLA DE RESULTADOS (MUCHA CORRECION DE IA)*/
+
+/* =====================================================
+   13. GENERAR TABLA DE RESULTADOS
+   El tbody en HTML debe tener id="tablaResultados"
+===================================================== */
 function generarTabla(data) {
     const tbody = document.getElementById("tablaResultados");
 
@@ -558,8 +548,9 @@ function generarTabla(data) {
     });
 }
 
-
-/* 13. LIMPIAR TABLA*/
+/* =====================================================
+   14. TABLA VACÍA INICIAL
+===================================================== */
 function limpiarTabla() {
     const tbody = document.getElementById("tablaResultados");
 
@@ -572,7 +563,9 @@ function limpiarTabla() {
     `;
 }
 
-/* 14. CALCULAR ESTADÍSTICAS (MUCHA CORRECION DE IA -REFORMULADO TOTALMENTE)*/
+/* =====================================================
+   15. ESTADÍSTICAS
+===================================================== */
 function calcularEstadisticas(data) {
     if (!data || !data.features) return;
 
@@ -593,7 +586,11 @@ function calcularEstadisticas(data) {
     crearGraficoVeredas(conteoVeredas);
 }
 
-/* 15. ACTUALIZAR TARJETAS RESUMEN (MUCHA CORRECION DE IA -REFORMULADO TOTALMENTE)*/
+/* =====================================================
+   16. TARJETAS RESUMEN
+   Deben existir en HTML:
+   totalEventos, totalVeredas, eventoPredominante
+===================================================== */
 function actualizarCardsResumen(data, conteoRiesgos, conteoVeredas) {
     const totalEventosEl = document.getElementById("totalEventos");
     const totalVeredasEl = document.getElementById("totalVeredas");
@@ -622,7 +619,10 @@ function actualizarCardsResumen(data, conteoRiesgos, conteoVeredas) {
     }
 }
 
-/* 16. MOSTRAR DETALLE ESTADÍSTICO*/
+/* =====================================================
+   17. DETALLE ESTADÍSTICO
+   Debe existir en HTML: id="estadisticasRiesgo"
+===================================================== */
 function mostrarDetalleEstadistico(conteoRiesgos) {
     const contenedor = document.getElementById("estadisticasRiesgo");
 
@@ -652,7 +652,10 @@ function mostrarDetalleEstadistico(conteoRiesgos) {
     });
 }
 
-/* 17. CREAR GRÁFICO DE BARRAS - EVENTOS DE RIESGO (REVISAR LOS DATOS EN CSS E INDEX QUE SEAN COHERENTES, NO - CORRE*/
+/* =====================================================
+   18. GRÁFICO DE RIESGOS
+   Debe existir canvas con id="graficoRiesgos"
+===================================================== */
 function crearGraficoRiesgos(conteoRiesgos) {
     const canvas = document.getElementById("graficoRiesgos");
 
@@ -703,7 +706,10 @@ function crearGraficoRiesgos(conteoRiesgos) {
     });
 }
 
-/*18. CREAR GRÁFICO CIRCULAR - VEREDAS*/
+/* =====================================================
+   19. GRÁFICO DE VEREDAS
+   Debe existir canvas con id="graficoVeredas"
+===================================================== */
 function crearGraficoVeredas(conteoVeredas) {
     const canvas = document.getElementById("graficoVeredas");
 
@@ -744,11 +750,15 @@ function crearGraficoVeredas(conteoVeredas) {
     });
 }
 
+/* =====================================================
+   20. EXPONER FUNCIONES PARA BOTONES HTML
+===================================================== */
 window.filtrarDatos = filtrarDatos;
 window.limpiarFiltro = limpiarFiltro;
 
-
-/* 19. ESTADO INICIAL DEL SISTEMA (AYUDA IA)*/
+/* =====================================================
+   21. ESTADO INICIAL
+===================================================== */
 document.addEventListener("DOMContentLoaded", function () {
     limpiarTabla();
 });
