@@ -472,7 +472,6 @@ function limpiarFiltro() {
         map.fitBounds(veredasLayer.getBounds(), { padding: [20, 20] });
     }
 }
-
 /*
 // 12. GENERAR TABLA DE RESULTADOS (MUCHA CORRECION DE IA)*/
 function generarTabla(data) {
@@ -544,6 +543,7 @@ function generarTabla(data) {
         tbody.appendChild(fila);
     });
 }
+
 
 /* 13. LIMPIAR TABLA*/
 function limpiarTabla() {
@@ -729,6 +729,9 @@ function crearGraficoVeredas(conteoVeredas) {
         }
     });
 }
+
+window.filtrarDatos = filtrarDatos;
+window.limpiarFiltro = limpiarFiltro;
 
 
 /* 19. ESTADO INICIAL DEL SISTEMA (AYUDA IA)*/
