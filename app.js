@@ -189,10 +189,10 @@ function obtenerColorPorRiesgo(riesgo = "") {
 
 
 /* 5. CARGAR CAPA DE VEREDAS - GEOJSON ARGIS SHP*/
-fetch("data/veredas.geojson")
+fetch("veredas.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar data/veredas.geojson"); /*renglon de IA*/
+            throw new Error("No fue posible cargar veredas.geojson"); /*renglon de IA*/
         }
         return response.json();
     })
@@ -249,10 +249,10 @@ fetch("data/veredas.geojson")
 
 
 /* 6. CARGAR PUNTOS CRÍTICOS: archivo kml a geijson (io)*/
-fetch("data/puntos_criticos.geojson")
+fetch("puntos_criticos.geojson")
     .then(response => {
         if (!response.ok) {
-            throw new Error("No fue posible cargar data/puntos_criticos.geojson");
+            throw new Error("No fue posible cargar puntos_criticos.geojson");
         }
         return response.json();
     })
